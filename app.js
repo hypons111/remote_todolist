@@ -16,22 +16,17 @@ db.on('error', () => {
 
 db.once('open', () => {
   console.log('mongodb connected')
-  for (let i = 0; i < 10; i++) {
-    Todo.create({ name: 'name-' + i })
-  }
-  console.log('done')
 })
 
 
-//  app.engine('handlebars', expHbs.defaultLayout: 'main')
-//  app.set(view.engine, 'handlebars')
-
-
-
+//  設定 handlebars，改變副檔名
+app.engine('hb', expHbs({ defaultLayout: 'main', extname: '.hb' }))
+//  啟用 handlebars
+app.set('view engine', 'hb')
 
 
 app.get('/', (req, res) => {
-  res.send('Its working.')
+  res.render('index')
 })
 
 app.listen(port, () => {
