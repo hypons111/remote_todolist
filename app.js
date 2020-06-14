@@ -28,6 +28,7 @@ app.set('view engine', 'hb')
 app.use(bodPar.urlencoded({ extended: true }))
 
 
+//  首頁
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
@@ -35,12 +36,28 @@ app.get('/', (req, res) => {
     .catch(error => console.error(error))
 })
 
+
+//  新增頁
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
 
 
-//  create page
+//  詳細頁
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+
+  //  以 id 去尋找
+  return Todo.findById(id)
+    //  「撈資料以後想用 res.render()，就要先用 .lean()」
+    .lean()
+    //  拿到資料後會被存在 todo 變數裡，傳給樣板引擎
+    .then((todo) => res.render('detail', { todo }))
+    .catch(error => console.log(error))
+})
+
+
+//  將新增的資料送往資料庫
 app.post('/todos', (req, res) => {
   const name = req.body.name
 
@@ -66,21 +83,7 @@ app.post('/todos', (req, res) => {
 })
 
 
-//  detail page
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-
-  //  以 id 去尋找
-  return Todo.findById(id)
-    //  「撈資料以後想用 res.render()，就要先用 .lean()」
-    .lean()
-    //  拿到資料後會被存在 todo 變數裡，傳給樣板引擎
-    .then((todo) => res.render('detail', { todo }))
-    .catch(error => console.log(error))
-})
-
-
-//  edit page
+//  修改頁
 app.get('/todos/:id/edit', (req, res) => {
   const id = req.params.id
 
@@ -94,7 +97,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 
-//  接住表單資料，並且送往資料庫
+//  將修改後的資料送往資料庫
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   const name = req.body.name
@@ -104,6 +107,21 @@ app.post('/todos/:id/edit', (req, res) => {
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
+
+
+//  刪除頁
+app.post('/todos/:id/delete', (req, res) => {
+  //  取得網址上的識別碼，用來查詢使用者想刪除的 To-do
+  const id = req.params.id
+
+  //  查詢資料，資料庫查詢成功以後，會把資料放進 todo
+  return Todo.findById(id)
+    //  「撈資料以後想用 res.render()，就要先用 .lean()」
+    //  用 todo.remove() 刪除這筆資料
+    .then((todo) => todo.remove())
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 

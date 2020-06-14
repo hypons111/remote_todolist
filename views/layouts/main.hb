@@ -9,6 +9,9 @@
 
 <body>
   {{{ body }}}
+  <div>
+    <a href="/">Back</a>
+  </div>
 </body>
 
 </html>
