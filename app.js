@@ -19,9 +19,9 @@ db.once('open', () => {
 
 
 //  設定 handlebars，改變副檔名
-app.engine('hb', expHbs({ defaultLayout: 'main', extname: '.hb' }))
+app.engine('hbs', expHbs({ defaultLayout: 'main', extname: '.hbs' }))
 //  啟用 handlebars
-app.set('view engine', 'hb')
+app.set('view engine', 'hbs')
 
 
 //  設定 body-parser
@@ -46,7 +46,6 @@ app.get('/todos/new', (req, res) => {
 //  詳細頁
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
-
   //  以 id 去尋找
   return Todo.findById(id)
     //  「撈資料以後想用 res.render()，就要先用 .lean()」
@@ -86,7 +85,6 @@ app.post('/todos', (req, res) => {
 //  修改頁
 app.get('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-
   //  以 id 去尋找
   return Todo.findById(id)
     //  「撈資料以後想用 res.render()，就要先用 .lean()」
@@ -100,10 +98,12 @@ app.get('/todos/:id/edit', (req, res) => {
 //  將修改後的資料送往資料庫
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  //  解構賦值 (destructuring assignment)
+  const { name, isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))

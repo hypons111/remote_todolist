@@ -9,12 +9,17 @@ const Schema = mongoose.Schema
 //  把我們想要的資料結構當成參數傳給 new Schema()
 const todoSchema = new Schema({
   name: {
-
-    // 資料型別是字串
+    //  資料型別是字串
     type: String,
-
-    // 這是個必填欄位
+    //  這是個必填欄位
     required: true
+  },
+  isDone: {
+    //  資料型別是 Boolean
+    //  通常變數名稱用 is，暗示著這個變數的型別為布林值。
+    type: Boolean,
+    //  預設是 false
+    default: false
   }
 })
 
