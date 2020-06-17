@@ -4,6 +4,7 @@ const app = express()
 const mongoose = require('mongoose')
 const expHbs = require('express-handlebars')
 const bodPar = require('body-parser')
+const metOve = require('method-override')
 const Todo = require('./models/todo')
 
 
@@ -27,6 +28,9 @@ app.set('view engine', 'hbs')
 //  設定 body-parser
 app.use(bodPar.urlencoded({ extended: true }))
 
+
+//  設定 method-override
+app.use(metOve('_method'))
 
 //  首頁
 app.get('/', (req, res) => {
@@ -98,7 +102,7 @@ app.get('/todos/:id/edit', (req, res) => {
 
 
 //  將修改後的資料送往資料庫
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   //  解構賦值 (destructuring assignment)
   const { name, isDone } = req.body
@@ -114,7 +118,7 @@ app.post('/todos/:id/edit', (req, res) => {
 
 
 //  刪除頁
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   //  取得網址上的識別碼，用來查詢使用者想刪除的 To-do
   const id = req.params.id
 
