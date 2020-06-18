@@ -1,14 +1,11 @@
 const port = 3000
 const express = require('express')
 const app = express()
-
 const expHbs = require('express-handlebars')
 const bodPar = require('body-parser')
 const metOve = require('method-override')
 const routes = require('./routes')
-const Todo = require('./models/todo')
 require('./config/mongoose')
-
 
 
 //  設定 handlebars，改變副檔名
