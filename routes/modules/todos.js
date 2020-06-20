@@ -4,10 +4,7 @@ const router = express.Router()
 // 載入 todo model
 const Todo = require('../../models/todo')
 
-//  新增頁
-router.get('/new', (req, res) => {
-  return res.render('new')
-})
+
 
 //  詳細頁
 router.get('/:id', (req, res) => {
@@ -21,12 +18,15 @@ router.get('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//  新增頁
+router.get('/new', (req, res) => {
+  return res.render('new')
+})
+
 //  將新增的資料送往資料庫
 router.post('/', (req, res) => {
   const name = req.body.name
-
   //  有兩個方法可以在資料庫新增資料
-
 
   // 方法一：
   // 在伺服器端由 Todo 產生一個實例

@@ -1,0 +1,8 @@
+{{#if firstName}}
+<h1>Welcome back, {{firstName}} </h1>
+<a class="navbar-brand" href="/">Home</a>
+{{/if}}
+
+{{#unless firstName}}
+<h1>WARNING: This entry does not have a license!</h1>
+{{/unless}}
